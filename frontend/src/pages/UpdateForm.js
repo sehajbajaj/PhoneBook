@@ -11,7 +11,9 @@ const UpdateForm = () => {
 
   useEffect(() => {
     const fetchPersons = async () => {
-      const response = await fetch(`/api/persons/${id}`);
+      const response = await fetch(
+        `https://phonebook-xvm7.onrender.com/api/persons/${id}`
+      );
       console.log(response);
       const json = await response.json();
       console.log(json);
@@ -32,13 +34,16 @@ const UpdateForm = () => {
 
     const person = { name: name, number: number, location: location };
 
-    const response = await fetch("/api/persons/" + id, {
-      method: "PATCH",
-      body: JSON.stringify(person),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      "https://phonebook-xvm7.onrender.com/api/persons/" + id,
+      {
+        method: "PATCH",
+        body: JSON.stringify(person),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const json = await response.json();
 
     if (!response.ok) {

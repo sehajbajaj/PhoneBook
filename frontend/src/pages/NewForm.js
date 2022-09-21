@@ -23,13 +23,16 @@ const NewForm = () => {
     //   setNumber("");
     //   setLocation("");
     // } else {
-    const response = await fetch("/api/persons", {
-      method: "POST",
-      body: JSON.stringify(person),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      "https://phonebook-xvm7.onrender.com/api/persons",
+      {
+        method: "POST",
+        body: JSON.stringify(person),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const json = await response.json();
 
     if (!response.ok) {

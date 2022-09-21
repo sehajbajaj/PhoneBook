@@ -8,7 +8,9 @@ const Home = () => {
 
   useEffect(() => {
     const fetchPersons = async () => {
-      const response = await fetch("/api/persons");
+      const response = await fetch(
+        "https://phonebook-xvm7.onrender.com/api/persons"
+      );
       const json = await response.json();
       if (response.ok) {
         setPersons(json);
@@ -37,9 +39,12 @@ const Home = () => {
 
   const handleDeleteSearch = async (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
-      const response = await fetch("/api/persons/" + person._id, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        "https://phonebook-xvm7.onrender.com/api/persons/" + person._id,
+        {
+          method: "DELETE",
+        }
+      );
       if (!response.ok) {
         alert(`${person.name} is already deleted from the phonebook!`);
       }
@@ -57,9 +62,12 @@ const Home = () => {
 
   const handleDelete = async (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
-      const response = await fetch("/api/persons/" + person._id, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        "https://phonebook-xvm7.onrender.com/api/persons/" + person._id,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!response.ok) {
         alert(`${person.name} is already deleted from the phonebook!`);
