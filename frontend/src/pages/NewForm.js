@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePersonsContext } from "../hooks/usePersonsContext";
 
 const NewForm = () => {
-  const { persons, dispatch } = usePersonsContext();
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [location, setLocation] = useState("");
@@ -12,36 +10,38 @@ const NewForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!name || !number || !location) {
+      setError("Please enter all the fields");
+      return;
+    }
     const person = { name, number, location };
 
-    const dupe = persons.find((p) => p.name === person.name);
-    if (dupe) {
-      alert(`${dupe.name} is already added to phonebook.`);
+    // const dupe = persons.find((p) => p.name === person.name);
+    // if (dupe) {
+    //   alert(`${dupe.name} is already added to phonebook.`);
+    //   setName("");
+    //   setNumber("");
+    //   setLocation("");
+    // } else {
+    const response = await fetch("/api/persons", {
+      method: "POST",
+      body: JSON.stringify(person),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const json = await response.json();
+
+    if (!response.ok) {
+      setError(json.error);
+    }
+    if (response.ok) {
       setName("");
       setNumber("");
       setLocation("");
-    } else {
-      const response = await fetch("/api/persons", {
-        method: "POST",
-        body: JSON.stringify(person),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const json = await response.json();
-
-      if (!response.ok) {
-        setError(json.error);
-      }
-      if (response.ok) {
-        setName("");
-        setNumber("");
-        setLocation("");
-        setError(null);
-        console.log("New Contact added");
-        dispatch({ type: "CREATE_PERSONS", payload: json });
-        navigate("/");
-      }
+      setError(null);
+      console.log("New Contact added");
+      navigate("/");
     }
   };
 

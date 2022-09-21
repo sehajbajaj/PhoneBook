@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { usePersonsContext } from "../hooks/usePersonsContext";
 
 const UpdateForm = () => {
-  const { dispatch } = usePersonsContext();
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [location, setLocation] = useState("");
@@ -27,7 +25,7 @@ const UpdateForm = () => {
       }
     };
     fetchPersons();
-  }, [id, dispatch, navigate]);
+  }, [id, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,8 +50,6 @@ const UpdateForm = () => {
       setLocation("");
       setError(null);
       console.log("Contact Updated");
-      dispatch({ type: "SET_PERSONS", payload: json });
-      dispatch({ type: "UPDATE_PERSON", payload: json });
       navigate("/");
     }
   };

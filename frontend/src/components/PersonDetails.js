@@ -1,30 +1,13 @@
 import { Link } from "react-router-dom";
-import { usePersonsContext } from "../hooks/usePersonsContext";
 
-const PersonDetails = ({ person, fil }) => {
-  const { dispatch } = usePersonsContext();
-
-  const handleDelete = async () => {
-    if (window.confirm(`Delete ${person.name}?`)) {
-      const response = await fetch("/api/persons/" + person._id, {
-        method: "DELETE",
-      });
-      const json = await response.json();
-
-      if (!response.ok) {
-        alert(`${person.name} is already deleted from the phonebook!`);
-      }
-
-      if (response.ok) {
-        if (fil) {
-          dispatch({ type: "DELETE_SEARCH", payload: json });
-        } else {
-          dispatch({ type: "DELETE_PERSON", payload: json });
-        }
-      }
+const PersonDetails = ({ person, fil, handleDeleteSearch, handleDelete }) => {
+  const selectDelete = () => {
+    if (fil === true) {
+      handleDeleteSearch(person);
+    } else {
+      handleDelete(person);
     }
   };
-
   return (
     <tbody>
       <tr>
@@ -55,7 +38,7 @@ const PersonDetails = ({ person, fil }) => {
           <>
             <button
               className="btn btn-circle btn-outline btn-primary btn-sm "
-              onClick={handleDelete}
+              onClick={selectDelete}
             >
               <svg
                 xmlns="http:www.w3.org/2000/svg"

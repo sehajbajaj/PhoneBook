@@ -1,33 +1,7 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { usePersonsContext } from "../hooks/usePersonsContext";
+import Theme from "./Theme";
 
 const Navbar = () => {
-  const { dispatch } = usePersonsContext();
-  const [searchValue, setSearchValue] = useState("");
-
-  const onChange = (e) => {
-    const keyword = e.target.value;
-    setSearchValue(keyword);
-    // console.log(searchValue);
-
-    if (searchValue !== "") {
-      dispatch({ type: "FILTER_BLOGS", payload: searchValue });
-    } else {
-      dispatch({ type: "CLEAR_FILTERS" });
-    }
-    // const keyword = e.target.value;
-
-    // if (keyword !== "") {
-    //   const result = persons.filter((person) => {
-    //     return person.name.toLowerCase().startsWith(keyword.toLowerCase());
-    //   });
-    //   setSearchElement(result);
-    // } else {
-    //   setSearchElement(keyword);
-    // }
-    // setFilter(keyword);
-  };
   return (
     <header>
       <nav>
@@ -108,14 +82,8 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          <div className=" navbar-end form-control">
-            <input
-              type="text"
-              placeholder="Search"
-              className="input input-bordered mr-0"
-              value={searchValue}
-              onChange={onChange}
-            />
+          <div className=" navbar-end ">
+            <Theme />
           </div>
         </div>
       </nav>

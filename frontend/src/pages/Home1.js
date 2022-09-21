@@ -1,26 +1,21 @@
 import PersonDetails from "../components/PersonDetails";
 import { useEffect, useState } from "react";
-import { usePersonsContext } from "../hooks/usePersonsContext";
 
 const Home = () => {
-  const { dispatch, persons } = usePersonsContext();
   const [searchValue, setSearchValue] = useState("");
   const [storeFilter, setStoreFilter] = useState([]);
-  // const input1 = useRef();
+  const [persons, setPersons] = useState([]);
 
   useEffect(() => {
     const fetchPersons = async () => {
       const response = await fetch("/api/persons");
       const json = await response.json();
       if (response.ok) {
-        dispatch({ type: "SET_PERSONS", payload: json });
+        setPersons(json);
       }
     };
     fetchPersons();
-  }, [dispatch]);
-
-  // console.log(filtered);
-  console.log(persons);
+  }, []);
 
   const handleSearch = (e) => {
     setSearchValue(e.target.value);
@@ -28,24 +23,17 @@ const Home = () => {
 
     if (searchValue !== "") {
       const result = persons.filter((person) => {
-        // return person.name.match(new RegExp(`${searchValue}`, "i"));
         return person.name.toLowerCase().startsWith(searchValue.toLowerCase());
       });
       setStoreFilter(result);
     }
   };
 
-  // useEffect(() => {
-  //   setSearchValue("");
-  //   setStoreFilter(null);
-  // }, []);
-
   const handleDeleteSearch = async (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
       const response = await fetch("/api/persons/" + person._id, {
         method: "DELETE",
       });
-      const json = await response.json();
       if (!response.ok) {
         alert(`${person.name} is already deleted from the phonebook!`);
       }
@@ -53,7 +41,9 @@ const Home = () => {
         setStoreFilter((prev) => {
           return prev.filter((jk) => jk._id !== person._id);
         });
-        dispatch({ type: "DELETE_PERSON", payload: json });
+        setPersons((prev) => {
+          return prev.filter((jk) => jk._id !== person._id);
+        });
         console.log(storeFilter);
       }
     }
@@ -64,14 +54,15 @@ const Home = () => {
       const response = await fetch("/api/persons/" + person._id, {
         method: "DELETE",
       });
-      const json = await response.json();
 
       if (!response.ok) {
         alert(`${person.name} is already deleted from the phonebook!`);
       }
 
       if (response.ok) {
-        dispatch({ type: "DELETE_PERSON", payload: json });
+        setPersons((prev) => {
+          return prev.filter((jk) => jk._id !== person._id);
+        });
       }
     }
   };
@@ -88,7 +79,6 @@ const Home = () => {
           placeholder="Search"
           className="input input-bordered w-full max-w-xs"
           value={searchValue}
-          // ref={input1}
           onChange={handleSearch}
         />
         <button onClick={handleReset} className="btn btn-wide ml-5">
