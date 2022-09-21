@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home1 from "./pages/Home1";
+import Home from "./pages/Home";
 import NewForm from "./pages/NewForm";
 import UpdateForm from "./pages/UpdateForm";
 import Footer from "./components/Footer";
@@ -13,7 +13,7 @@ function App() {
           <Navbar />
           <div>
             <Routes>
-              <Route path="/" element={<Home1 />} />
+              <Route path="/" element={<Home />} />
               <Route path="/newcontact" element={<NewForm />} />
               <Route path="/update/:id" element={<UpdateForm />} />
             </Routes>

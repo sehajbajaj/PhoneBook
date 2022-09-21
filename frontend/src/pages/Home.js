@@ -1,60 +1,56 @@
 import PersonDetails from "../components/PersonDetails";
 import { useEffect, useState } from "react";
-import { usePersonsContext } from "../hooks/usePersonsContext";
 
 const Home = () => {
-  const { dispatch, persons } = usePersonsContext();
-  const [searchValue, setSearchValue] = useState("");
-  const [storeFilter, setStoreFilter] = useState([]);
-  // const input1 = useRef();
+  const [persons, setPersons] = useState([]);
+  const [filters, setFilters] = useState("");
+  const [searchElement, setSearchElement] = useState([]);
 
   useEffect(() => {
     const fetchPersons = async () => {
       const response = await fetch("/api/persons");
       const json = await response.json();
       if (response.ok) {
-        dispatch({ type: "SET_PERSONS", payload: json });
+        setPersons(json);
       }
     };
     fetchPersons();
-  }, [dispatch]);
+  }, []);
 
-  // console.log(filtered);
-  console.log(persons);
+  useEffect(() => {
+    handleReset();
+  }, []);
 
-  const handleSearch = (e) => {
-    setSearchValue(e.target.value);
-    console.log(searchValue);
+  const onFilter = (e) => {
+    const keyword = e.target.value;
 
-    if (searchValue !== "") {
-      const result = persons.filter((person) => {
-        // return person.name.match(new RegExp(`${searchValue}`, "i"));
-        return person.name.toLowerCase().startsWith(searchValue.toLowerCase());
+    if (keyword !== "") {
+      const results = persons.filter((person) => {
+        return person.name.toLowerCase().startsWith(keyword.toLowerCase());
       });
-      setStoreFilter(result);
+      setSearchElement(results);
+    } else {
+      setSearchElement(keyword);
     }
+    setFilters(keyword);
   };
-
-  // useEffect(() => {
-  //   setSearchValue("");
-  //   setStoreFilter(null);
-  // }, []);
 
   const handleDeleteSearch = async (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
       const response = await fetch("/api/persons/" + person._id, {
         method: "DELETE",
       });
-      const json = await response.json();
       if (!response.ok) {
         alert(`${person.name} is already deleted from the phonebook!`);
       }
       if (response.ok) {
-        setStoreFilter((prev) => {
+        setSearchElement((prev) => {
           return prev.filter((jk) => jk._id !== person._id);
         });
-        dispatch({ type: "DELETE_PERSON", payload: json });
-        console.log(storeFilter);
+        setPersons((prev) => {
+          return prev.filter((jk) => jk._id !== person._id);
+        });
+        console.log(searchElement);
       }
     }
   };
@@ -64,36 +60,37 @@ const Home = () => {
       const response = await fetch("/api/persons/" + person._id, {
         method: "DELETE",
       });
-      const json = await response.json();
 
       if (!response.ok) {
         alert(`${person.name} is already deleted from the phonebook!`);
       }
 
       if (response.ok) {
-        dispatch({ type: "DELETE_PERSON", payload: json });
+        setPersons((prev) => {
+          return prev.filter((jk) => jk._id !== person._id);
+        });
       }
     }
   };
 
   const handleReset = () => {
-    setSearchValue(() => "");
+    setFilters(() => "");
   };
   return (
     <>
       <br />
       <div className="flex">
         <input
-          type="text"
+          type="search"
           placeholder="Search"
           className="input input-bordered w-full max-w-xs"
-          value={searchValue}
-          // ref={input1}
-          onChange={handleSearch}
+          value={filters}
+          onSubmit={(event) => event.preventDefault()}
+          onChange={onFilter}
         />
-        <button onClick={handleReset} className="btn btn-wide ml-5">
+        {/* <button onClick={handleReset} className="btn btn-wide ml-5">
           RESET
-        </button>
+        </button> */}
       </div>
       <br />
 
@@ -107,8 +104,8 @@ const Home = () => {
               <th>Actions</th>
             </tr>
           </thead>
-          {searchValue && searchValue !== ""
-            ? storeFilter
+          {filters !== ""
+            ? searchElement
                 .sort((a, b) =>
                   a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1
                 )
