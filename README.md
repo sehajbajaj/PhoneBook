@@ -1,8 +1,8 @@
-# PhoneBook App ☎️📱
+# PhoneBook App ☎️📱 
 
 **Phonebook Application is a Full-Stack application built using **MERN Stack**.**
 
-# Salient Features
+## Salient Features
 
 - It is a web application that gives the contact information of people/organizations entered by the user.
 - The user can create a new contact, update existing contact information, delete contacts and search for a particular contact in the phonebook. 
