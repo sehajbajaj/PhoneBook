@@ -91,14 +91,11 @@ const Home = () => {
         <input
           type="search"
           placeholder="Search"
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered w-full max-w-xs input-primary"
           value={filters}
           onSubmit={(event) => event.preventDefault()}
           onChange={onFilter}
         />
-        {/* <button onClick={handleReset} className="btn btn-wide ml-5">
-          RESET
-        </button> */}
       </div>
       <br />
 

@@ -16,13 +16,6 @@ const NewForm = () => {
     }
     const person = { name, number, location };
 
-    // const dupe = persons.find((p) => p.name === person.name);
-    // if (dupe) {
-    //   alert(`${dupe.name} is already added to phonebook.`);
-    //   setName("");
-    //   setNumber("");
-    //   setLocation("");
-    // } else {
     const response = await fetch(
       "https://phonebook-xvm7.onrender.com/api/persons",
       {
@@ -88,9 +81,7 @@ const NewForm = () => {
             onChange={(e) => setLocation(e.target.value)}
           ></input>
 
-          <button className="btn btn-wide my-5 place-self-center">
-            Add Contact
-          </button>
+          <button className="btn btn-primary my-5">Add Contact</button>
           {error && (
             <div className="alert alert-error">
               <div>

@@ -98,9 +98,7 @@ const UpdateForm = () => {
             className="input input-bordered input-primary w-full"
             onChange={(e) => setLocation(e.target.value)}
           ></input>
-          <button className="btn btn-wide my-5 place-self-center">
-            Update Contact
-          </button>
+          <button className="btn btn-primary my-5">Update Contact</button>
           {error && (
             <div className="alert alert-error">
               <div>
